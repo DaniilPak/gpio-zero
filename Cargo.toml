@@ -1,0 +1,31 @@
+[package]
+name = "gpio-zero"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+authors = ["DaniilPak"]
+description = "A simple, high-level device API for Raspberry Pi and other Linux GPIO boards (LEDs, buttons, motors, servos, sensors, ADCs), inspired by Python's gpiozero."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/DaniilPak/gpio-zero"
+documentation = "https://docs.rs/gpio-zero"
+readme = "README.md"
+keywords = ["gpio", "raspberry-pi", "embedded", "led", "gpiozero"]
+categories = ["embedded", "hardware-support"]
+exclude = [".github/"]
+
+[features]
+default = ["cdev"]
+## Linux GPIO character-device backend (/dev/gpiochipN) + spidev hardware SPI. Works on every Pi incl. Pi 5.
+cdev = ["dep:gpiocdev", "dep:spidev"]
+## rppal backend (Raspberry Pi 0-5): GPIO, software PWM, hardware SPI.
+rppal = ["dep:rppal"]
+
+[target.'cfg(target_os = "linux")'.dependencies]
+gpiocdev = { version = "0.8", optional = true }
+spidev = { version = "0.7", optional = true }
+rppal = { version = "0.22", optional = true }
+libc = "0.2"
+
+[package.metadata.docs.rs]
+all-features = true
+targets = ["x86_64-unknown-linux-gnu", "aarch64-unknown-linux-gnu"]
